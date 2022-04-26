@@ -9,7 +9,7 @@ if(DEFINED CMAKE_BUILD_TYPE)
 else() 
 	set(CMAKE_BUILD_TYPE Debug CACHE STRING "Set CMAKE_BUILD_TYPE=Debug")
 endif()
-message(STATUS "CMAKE_BUILD_TYPE = "${CMAKE_BUILD_TYPE})
+message(STATUS "CMAKE_BUILD_TYPE = " ${CMAKE_BUILD_TYPE})
 
 set(EXE meshimprove)
 
