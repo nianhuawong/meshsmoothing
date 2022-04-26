@@ -1,7 +1,7 @@
 clc;clear;
 %%
 addpath('D:\Codes\Mesh_Generation\ANN_AFT_tri\Optimize\')
-TR = stlread("./6/sixth.stl");
+TR = stlread("./b.stl");
 triplot(TR);
 axis equal;
 axis off;
