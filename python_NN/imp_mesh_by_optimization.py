@@ -7,7 +7,8 @@ import matplotlib.tri as tri
 import meshplex
 from scipy.spatial import Delaunay
 import numpy as np
-from sklearn.externals import joblib
+#from sklearn.externals import joblib
+import joblib
 import time
 import meshio
 import meshplex
@@ -81,7 +82,7 @@ def run(input_file, output_file, opt_epoch, lr, coltrol):
     points = mesh.vertices    #网格的点的坐标
     faces = mesh.faces   #网格的三角片
     meshbac = meshplex.MeshTri(points,faces) #可以用来查找哪些点是边界点
-    bpindex = meshbac.is_boundary_node   #这个是bool数组
+    bpindex = meshbac.is_boundary_point   #这个是bool数组
     vvlist = mesh.vertex_neighbors  #点的邻接点关系
     vfarray = mesh.vertex_faces
 
@@ -96,33 +97,33 @@ def run(input_file, output_file, opt_epoch, lr, coltrol):
 
     #创建输出文件
 
-    f3 = open("./data/dataset3.txt", 'a')
-    f4 = open("./data/dataset4.txt", 'a')
-    f5 = open("./data/dataset5.txt", 'a')
-    f6 = open("./data/dataset6.txt", 'a')
-    f7 = open("./data/dataset7.txt", 'a')
-    f8 = open("./data/dataset8.txt", 'a')
-    f9 = open("./data/dataset9.txt", 'a')
-    gt3 = open("./data/gtset3.txt", 'a')
-    gt4 = open("./data/gtset4.txt", 'a')
-    gt5 = open("./data/gtset5.txt", 'a')
-    gt6 = open("./data/gtset6.txt", 'a')
-    gt7 = open("./data/gtset7.txt", 'a')
-    gt8 = open("./data/gtset8.txt", 'a')
-    gt9 = open("./data/gtset9.txt", 'a')
+    # f3 = open("./data/dataset3.txt", 'a')
+    # f4 = open("./data/dataset4.txt", 'a')
+    # f5 = open("./data/dataset5.txt", 'a')
+    # f6 = open("./data/dataset6.txt", 'a')
+    # f7 = open("./data/dataset7.txt", 'a')
+    # f8 = open("./data/dataset8.txt", 'a')
+    # f9 = open("./data/dataset9.txt", 'a')
+    # gt3 = open("./data/gtset3.txt", 'a')
+    # gt4 = open("./data/gtset4.txt", 'a')
+    # gt5 = open("./data/gtset5.txt", 'a')
+    # gt6 = open("./data/gtset6.txt", 'a')
+    # gt7 = open("./data/gtset7.txt", 'a')
+    # gt8 = open("./data/gtset8.txt", 'a')
+    # gt9 = open("./data/gtset9.txt", 'a')
     #print('%d,%d' % (len(matches_a), len(matches_b)), file=f)
 
     #优化网格
     start = time.time()
     for t in range(opt_epoch):
-        print("this is epoch ",t)
+        print("this is epoch ", t)
         for i in range(0, points.shape[0]):
             if bpindex[i] == True:
                 continue
             else:
                 optimizer = optim.Adam([variapoints[i]], lr=lr)
                 energy = 0
-                for input in range(1, 5000):
+                for input in range(1, 5):
                     optimizer.zero_grad()
                     energy1 = compute_ele_energy(vfarray[i], variapoints, faces)
                     if abs(energy1 - energy) < coltrol:
@@ -160,23 +161,23 @@ def run(input_file, output_file, opt_epoch, lr, coltrol):
         '''
     meshbac.save(output_file)
     #关闭输出文件
-    f3.close()
-    f4.close()
-    f5.close()
-    f6.close()
-    f7.close()
-    f8.close()
-    f9.close()
-    gt3.close()
-    gt4.close()
-    gt5.close()
-    gt6.close()
-    gt7.close()
-    gt8.close()
-    gt9.close()
+    # f3.close()
+    # f4.close()
+    # f5.close()
+    # f6.close()
+    # f7.close()
+    # f8.close()
+    # f9.close()
+    # gt3.close()
+    # gt4.close()
+    # gt5.close()
+    # gt6.close()
+    # gt7.close()
+    # gt8.close()
+    # gt9.close()
     end = time.time()
-    print("this time ", t, " is ",end - start)
-    meshbac.show()    #展示优化后网格
+    print("this time ", t, " is ", end - start)
+    #meshbac.show()    #展示优化后网格
 
 def parse_args():
     """ Parse command line arguments.
@@ -200,4 +201,4 @@ if __name__ == "__main__":
     args = parse_args()
     run(args.input_file, args.output_file, args.opt_epoch, args.lr, args.cl)
 '''
-run("./sresult3.stl","./optsresult3.stl",10,0.1,0.00001)
+run("../example/1/first.stl", "../example/1/wnh.stl", 10, 0.1, 0.00001)

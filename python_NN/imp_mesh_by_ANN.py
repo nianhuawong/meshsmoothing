@@ -1,7 +1,8 @@
 import torch
 import argparse
 import numpy as np
-from sklearn.externals import joblib
+#from sklearn.externals import joblib
+import joblib
 import time
 import meshplex
 import trimesh
@@ -45,7 +46,7 @@ def run(input_file, output_file, opt_epoch):
     points = mesh.vertices  # 网格的点的坐标
     faces = mesh.faces  # 网格的三角片
     meshbac = meshplex.MeshTri(points, faces)  # 可以用来查找哪些点是边界点
-    bpindex = meshbac.is_boundary_node  # 这个是bool数组
+    bpindex = meshbac.is_boundary_point  # 这个是bool数组
     vvlist = mesh.vertex_neighbors  # 点的邻接关系
     print("hello1")
     meshbac.show()  # 展示优化前网格
@@ -115,5 +116,5 @@ if __name__ == "__main__":
     args = parse_args()
     run(args.input_file, args.output_file, args.opt_epoch)
 '''
-run("./sresult3.stl","./myoptsresult3.stl",10)
+run("../example/7/naca0012_bad.stl", "../example/7/wnh.stl", 10)
 #python imp_mesh_by_optimizer.py --input_file=./data/badtri.stl --output_file=./optbadtri.stl --opt_epoch=50
