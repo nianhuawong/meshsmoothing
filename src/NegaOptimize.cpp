@@ -6,9 +6,8 @@
 #include <graphics.h>      // 引用图形库头文件
 #include <conio.h>
 #include "meshquality.h"
-#define PI 3.14159265
+
 using namespace std;
-typedef OpenVolumeMesh::Geometry::Vec3d         Vec3d;
 
 void NegaOptimize(MyTetMesh &mesh, int iternum)
 	{

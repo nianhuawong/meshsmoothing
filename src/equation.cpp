@@ -8,7 +8,6 @@
 #include"OpenNL_psm.h"
 
 using namespace std;
-typedef OpenVolumeMesh::Geometry::Vec3d         Vec3d;
 
 Vec3d calc1(double matrix1[3][4]){
 	double matrix[4][5];

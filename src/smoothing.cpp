@@ -1,15 +1,13 @@
 #include"smoothing.h"
-#include<vector>
 #include<iostream>
 #include"equation.h"
 #include <graphics.h>      // 引用图形库头文件
 #include <conio.h>
 #include "meshquality.h"
-#define PI 3.14159265
+
 using namespace std;
-typedef OpenVolumeMesh::Geometry::Vec3d         Vec3d;
-#include <Dense>
 using namespace Eigen;
+
 void angleBasedSmoothing(MyMesh &mesh, int iternum)
 {
 	for (int i = 0; i < iternum; i++)

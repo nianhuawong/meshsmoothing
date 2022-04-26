@@ -1,36 +1,13 @@
 #include <iostream>
 #include <vector>
 #include "smoothing.h"
-#include"meshquality.h"
-#include"writefile.h"
+#include "meshquality.h"
+#include "writefile.h"
 #include "equation.h"
 #include "NegaOptimize.h"
 #include <graphics.h>      // 引用图形库头文件
 #include <conio.h>
 using namespace std;
-// -------------------- OpenMesh
-#include <OpenMesh/Core/IO/MeshIO.hh>
-#include <OpenMesh/Core/Mesh/TriMesh_ArrayKernelT.hh>
-#include <OpenMesh/Core/Mesh/Handles.hh>
-typedef OpenMesh::TriMesh_ArrayKernelT<>  MyMesh;
-#include <OpenMesh/Tools/Smoother/JacobiLaplaceSmootherT.hh>
-#include <OpenMesh/Tools/Smoother/LaplaceSmootherT.hh>
-// ---------------------openvolumemesh
-// Include vector classes
-#include <OpenVolumeMesh/Geometry/VectorT.hh>
-
-// Include polyhedral mesh kernel
-#include <OpenVolumeMesh/Mesh/PolyhedralMesh.hh>
-
-// Make some typedefs to facilitate your life
-typedef OpenVolumeMesh::Geometry::Vec3d         Vec3d;
-typedef OpenVolumeMesh::Geometry::Vec3f         Vec3f;
-typedef OpenVolumeMesh::GeometryKernel<Vec3f>   PolyhedralMeshV3f;
-
-
-#include<OpenVolumeMesh/Mesh/TetrahedralMesh.hh>
-typedef OpenVolumeMesh::GeometricTetrahedralMeshV3d MyTetMesh;
-
 
 int main2(int _argc, char** _argv) {
 

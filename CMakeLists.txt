@@ -12,6 +12,7 @@ ${INC_DIR}/NegaOptimize.h
 ${INC_DIR}/OpenNL_psm.h
 ${INC_DIR}/smoothing.h
 ${INC_DIR}/writefile.h
+${INC_DIR}/dataType.h
 )
 
 set(SRC_DIR ./src)

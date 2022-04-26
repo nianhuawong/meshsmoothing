@@ -1,7 +1,6 @@
 #include"writefile.h"
-#include <OpenMesh/Core/IO/MeshIO.hh>
-#include <OpenMesh/Core/Mesh/TriMesh_ArrayKernelT.hh>
-#include <OpenMesh/Core/Mesh/Handles.hh>
+
+using namespace std;
 void writeVTKWithFixedBoundery(MyMesh &mesh, char* filename)
 {
 	string fname(filename); //[50];

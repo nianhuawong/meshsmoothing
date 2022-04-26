@@ -1,23 +1,11 @@
 #ifndef _WRITEFILE_
 #define _WRITEFILE_
-#include <iostream>
-#include <vector>
-using namespace std;
-// -------------------- OpenMesh
-#include <OpenMesh/Core/Mesh/TriMesh_ArrayKernelT.hh>
-typedef OpenMesh::TriMesh_ArrayKernelT<>  MyMesh;
+#pragma once
+#include "dataType.h"
 
-// -------------------- OpenVolumeMesh
-#include<OpenVolumeMesh/Mesh/TetrahedralMesh.hh>
-typedef OpenVolumeMesh::GeometricTetrahedralMeshV3d MyTetMesh;
-typedef OpenVolumeMesh::Geometry::Vec3d         Vec3d;
 // ----------------------------------------------------------------------------
 
-//用于四边形
-#include <OpenMesh/Core/Mesh/PolyMesh_ArrayKernelT.hh>
-typedef OpenMesh::PolyMesh_ArrayKernelT<>  PolyMesh;
-
-void writeVTK(MyMesh &mesh, char* filename);
+void writeVTK(MyMesh& mesh, char* filename) {};
 void writeVTKWithFixedBoundery(MyMesh &mesh, char* filename);
 
 void readEleFile(MyTetMesh &mytet, string filename);
@@ -35,7 +23,7 @@ void writeQuadVTK(PolyMesh &mesh, char* filename);
 void readTriVTK(MyMesh &mesh, char* filename);
 
 //输出三角形网格
-void writeTriVTK(MyMesh &mesh, char* filename);
+void writeTriVTK(MyMesh& mesh, char* filename) {};
 
 //输入三角形网格
 void readTritxt(MyMesh &mesh, char* filename1, char* filename2);
