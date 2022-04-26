@@ -9,7 +9,7 @@
 
 using namespace std;
 
-Vec3d calc1(double matrix1[3][4]){
+Vec3d solve_equation_3D(double matrix1[3][4]){
 	double matrix[4][5];
 	Vec3d point;
 	for (int i = 1; i<4; i++){
@@ -42,7 +42,8 @@ Vec3d calc1(double matrix1[3][4]){
 	}
 	return point;
 }
-Vec3d calc(double matrix[3][4]){
+
+Vec3d Solve_OpenNL_3D(double matrix[3][4]){
 	Vec3d point;
 	nlNewContext();
 	nlSolverParameteri(NL_NB_VARIABLES, 3);
@@ -67,7 +68,8 @@ Vec3d calc(double matrix[3][4]){
 	nlDeleteContext(nlGetCurrent());
 	return point;
 }
-Vec3d calc(double matrix[2][3]){
+
+Vec3d Solve_equation_2D(double matrix[2][3]){
 
 	Vec3d point;
 	point[1] = (matrix[0][0] * matrix[1][2] - matrix[1][0] * matrix[0][2]) / (matrix[0][0] * matrix[1][1] - matrix[1][0] * matrix[0][1]);
@@ -85,7 +87,7 @@ Vec3d calc(double matrix[2][3]){
 	return point;
 }
 
-Vec3d Solve_OpenNL(double matrix[2][3]) {
+Vec3d Solve_OpenNL_2D(double matrix[2][3]) {
 	Vec3d point;
 	nlNewContext();
 	nlSolverParameteri(NL_NB_VARIABLES, 2);
@@ -110,6 +112,7 @@ Vec3d Solve_OpenNL(double matrix[2][3]) {
 	nlDeleteContext(nlGetCurrent());
 	return point;
 }
+
 /*
 demo
 

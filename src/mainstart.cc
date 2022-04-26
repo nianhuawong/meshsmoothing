@@ -9,6 +9,44 @@
 #include <conio.h>
 using namespace std;
 
+void main(){
+	MyMesh mymesh1;
+	MyMesh mymesh2;
+	MyMesh mymesh3;
+	MyMesh mymesh4;
+	//MyMesh mymesh3;
+	string filename = "../example/1/first.stl";
+	OpenMesh::IO::read_mesh(mymesh2, filename);
+	OpenMesh::IO::read_mesh(mymesh3, filename);
+
+	for (int i = -1; i < 10; i++)
+	{
+		if (i >= 0){
+			angleBasedSmoothing(mymesh2, 1);
+			GetMe(mymesh3, 1);
+		}
+		vector<double> qualities2 = computeMeshAngleQuality(mymesh2);
+		vector<double> qualities3 = computeMeshAngleQuality(mymesh3);
+		vector<double> qualities5 = computeMeshIdealElementQuality(mymesh2);
+		vector<double> qualities6 = computeMeshIdealElementQuality(mymesh3);
+		//vector<double> qualities4 = computeMeshAngleQuality(mymesh4);
+		//输出网格质量
+		cout << "angleBasedSmoothing    第" << i+1 << "次：";
+		outMeshAngleQuality(qualities2);
+		outMeshIdealElementQuality(qualities5);
+		cout << "GetMe      第" << i+1 << "次：";
+		outMeshAngleQuality( qualities3);
+		outMeshIdealElementQuality(qualities6);
+		//cout << "SmartSplitAngle 第" << i+1 << "次：";
+		//outMeshAngleQuality(qualities4);
+		cout << endl;
+		//bool out1 = OpenMesh::IO::write_mesh(mymesh1, "1.stl");
+	}
+
+	bool out2 = OpenMesh::IO::write_mesh(mymesh2, "ange2000.stl");
+	bool out3 = OpenMesh::IO::write_mesh(mymesh3, "get2000.stl");
+}
+
 int main2(int _argc, char** _argv) {
 
 	// Create mesh object
@@ -78,46 +116,6 @@ int main2(int _argc, char** _argv) {
 
 	return 0;
 }
-
-
-void main(){
-	MyMesh mymesh1;
-	MyMesh mymesh2;
-	MyMesh mymesh3;
-	MyMesh mymesh4;
-	//MyMesh mymesh3;
-	string filename = "sresult2.stl";
-	OpenMesh::IO::read_mesh(mymesh2, filename);
-	OpenMesh::IO::read_mesh(mymesh3, filename);
-
-	for (int i = -1; i < 10; i++)
-	{
-		if (i >= 0){
-			angleBasedSmoothing(mymesh2, 1);
-			GetMe(mymesh3, 1);
-		}
-		vector<double> qualities2 = computeMeshAngleQuality(mymesh2);
-		vector<double> qualities3 = computeMeshAngleQuality(mymesh3);
-		vector<double> qualities5 = computeMeshIdealElementQuality(mymesh2);
-		vector<double> qualities6 = computeMeshIdealElementQuality(mymesh3);
-		//vector<double> qualities4 = computeMeshAngleQuality(mymesh4);
-		//输出网格质量
-		cout << "angleBasedSmoothing    第" << i+1 << "次：";
-		outMeshAngleQuality(qualities2);
-		outMeshIdealElementQuality(qualities5);
-		cout << "GetMe      第" << i+1 << "次：";
-		outMeshAngleQuality( qualities3);
-		outMeshIdealElementQuality(qualities6);
-		//cout << "SmartSplitAngle 第" << i+1 << "次：";
-		//outMeshAngleQuality(qualities4);
-		cout << endl;
-		//bool out1 = OpenMesh::IO::write_mesh(mymesh1, "1.stl");
-	}
-
-	bool out2 = OpenMesh::IO::write_mesh(mymesh2, "ange2000.stl");
-	bool out3 = OpenMesh::IO::write_mesh(mymesh3, "get2000.stl");
-}
-
 
 void main3(){
 	// 测试比较优化算法
@@ -190,16 +188,21 @@ void main14()
 	bool result0 = OpenMesh::IO::read_mesh(mesh1, "e2000.stl");
 	bool result1 = OpenMesh::IO::read_mesh(mesh2, "e2000.stl");
 	bool result2 = OpenMesh::IO::read_mesh(mesh3, "e2000.stl");
+
 	clock_t ts = clock();
 	GetMe(mesh1, 10);
 	clock_t te = clock();
 	cout << 0 << " tests " << (te - ts) / 1000. << " sec." << endl;
 	OpenMesh::IO::write_mesh(mesh1, "1111.stl");
+
+
 	ts = clock();
 	//laplacianSmoothing(mesh2, 10);
 	te = clock();
 	cout << 1 << " tests " << (te - ts) / 1000. << " sec." << endl;
 	OpenMesh::IO::write_mesh(mesh2, "11111.stl");
+
+
 	ts = clock();
 	NNSmoothing(mesh3, 10);
 	te = clock();
@@ -207,5 +210,4 @@ void main14()
 	OpenMesh::IO::write_mesh(mesh3, "nne2000.stl");
 	//bool out1 = OpenMesh::IO::write_mesh(mesh3, "shenjingwangluo.stl");
 	cout << "hello" << endl;
-
 }
