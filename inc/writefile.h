@@ -5,12 +5,12 @@
 
 // ----------------------------------------------------------------------------
 
-void writeVTK(MyMesh& mesh, char* filename) {};
+void writeVTK(MyMesh& mesh, char* filename);
 void writeVTKWithFixedBoundery(MyMesh &mesh, char* filename);
 
-void readEleFile(MyTetMesh &mytet, string filename);
+void readEleFile(MyTetMesh &mytet, std::string filename);
 //输入四面体vtk格式
-bool readTetVTK(MyTetMesh &mesh, string fname);
+bool readTetVTK(MyTetMesh &mesh, std::string fname);
 
 //输入四边形网格
 void readQuadVTK(PolyMesh &mesh, char* filename);
@@ -23,7 +23,7 @@ void writeQuadVTK(PolyMesh &mesh, char* filename);
 void readTriVTK(MyMesh &mesh, char* filename);
 
 //输出三角形网格
-void writeTriVTK(MyMesh& mesh, char* filename) {};
+void writeTriVTK(MyMesh& mesh, char* filename);
 
 //输入三角形网格
 void readTritxt(MyMesh &mesh, char* filename1, char* filename2);

@@ -21,7 +21,7 @@ double computeMeshAveang(MyMesh& mesh);
 void outMeshIdealElementQuality(std::vector<double> &qualities);
 void outMeshAngleQuality(std::vector<double> &qualities);
 void outFileMeshAngleQuality(std::string fname, std::vector<double> &qualities2);
-void outFileMeshIdealElementQuality(std::string fname, std::vector<double>& qualities2) {};
+void outFileMeshIdealElementQuality(std::string fname, std::vector<double>& qualities2);
 
 
 double computeLocalAngleQuality(MyMesh::Point p, std::vector<MyMesh::Point> ring);
