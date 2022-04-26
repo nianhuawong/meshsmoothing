@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.0)
 
 project(meshimprove)
 
+#set(CMAKE_BUILD_TYPE Release)
+
 if(DEFINED CMAKE_BUILD_TYPE)
 	set(CMAKE_BUILD_TYPE ${CMAKE_BUILD_TYPE} CACHE STRING "Set CMAKE_BUILD_TYPE=CMAKE_BUILD_TYPE")
 else() 
@@ -37,7 +39,7 @@ ${SRC_DIR}/writefile.cpp
 )
 
 include_directories(./inc)
-include_directories(./lib/Eigen)
+include_directories(./lib/Eigen3.4)
 
 include_directories(./lib/OpenVolumeMesh2.0/include)
 link_directories(./lib/OpenVolumeMesh2.0/lib)
