@@ -111,4 +111,68 @@ else()
 target_link_libraries(${TARGET_NAME} OpenMeshCore OpenMeshTools OpenVolumeMesh)
 endif()
 
+#DRL_SMOOTHING
+set(TARGET_NAME DRL_Smoothing)
 
+set(INC_DIR ./inc)
+set(SRC_DIR ./src)
+
+set(HEADER 
+${INC_DIR}/equation.h
+${INC_DIR}/meshquality.h
+${INC_DIR}/NegaOptimize.h
+${INC_DIR}/OpenNL_psm.h
+${INC_DIR}/smoothing.h
+${INC_DIR}/writefile.h
+${INC_DIR}/dataType.h
+)
+
+set(SRC 
+${SRC_DIR}/equation.cpp
+${SRC_DIR}/main_DRL.cpp
+${SRC_DIR}/meshquality.cpp
+${SRC_DIR}/NegaOptimize.cpp
+${SRC_DIR}/OpenNL_psm.c
+${SRC_DIR}/smoothing.cpp
+${SRC_DIR}/writefile.cpp
+)
+
+set(DRL_DIR ./DRL)
+set(SRC ${SRC} 
+${DRL_DIR}/cnn_api.cpp
+${DRL_DIR}/DeepLearningNetwork.cpp
+${DRL_DIR}/evaluatePolicy.cpp
+${DRL_DIR}/evaluatePolicy_data.cpp
+${DRL_DIR}/evaluatePolicy_initialize.cpp
+${DRL_DIR}/evaluatePolicy_rtwutil.cpp
+${DRL_DIR}/evaluatePolicy_terminate.cpp
+${DRL_DIR}/MWCNNLayerImpl.cpp
+${DRL_DIR}/MWMkldnnUtils.cpp
+${DRL_DIR}/MWTanhLayer.cpp
+${DRL_DIR}/MWTanhLayerImpl.cpp
+${DRL_DIR}/MWTargetNetworkImpl.cpp
+${DRL_DIR}/predict.cpp
+)
+
+include_directories(./inc)
+include_directories(./lib/Eigen3.4)
+
+include_directories(./lib/OpenVolumeMesh2.0/include)
+link_directories(./lib/OpenVolumeMesh2.0/lib)
+
+include_directories(./lib/OpenMesh7.1/include)
+link_directories(./lib/OpenMesh7.1/lib)
+
+include_directories(C:/software/oneDNN/include/)
+link_directories(C:/software/oneDNN/bin/)
+link_directories(C:/software/oneDNN/lib/)
+
+include_directories(D:/Codes/Mesh_Generation/meshimprove_VS2019/DRL/)
+link_directories(D:/Codes/Mesh_Generation/meshimprove_VS2019/DRL/)
+
+add_executable(${TARGET_NAME} ${SRC} ${HEADER})
+if(CMAKE_BUILD_TYPE STREQUAL Debug)
+target_link_libraries(${TARGET_NAME} OpenMeshCored OpenMeshToolsd OpenVolumeMeshd mkldnn)
+else()
+target_link_libraries(${TARGET_NAME} OpenMeshCore OpenMeshTools OpenVolumeMesh mkldnn)
+endif()
