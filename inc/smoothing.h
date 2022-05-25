@@ -5,8 +5,11 @@
 #include "dataType.h"
 #include <Dense>
 
+void DRL_BasedSmoothing(MyMesh& mesh, int iternum);
 void angleBasedSmoothing(MyMesh &mesh, int iternum);
 void smartangleBasedSmoothing(MyMesh &mesh, int iternum);
+
+void LaplacianBasedSmoothing(MyMesh& mesh, int iternum);
 
 void GetMe(MyMesh &mesh, int iternum);
 
