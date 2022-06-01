@@ -6,7 +6,6 @@
 #include <Dense>
 
 void DRL_BasedSmoothing(MyMesh& mesh, int iternum);
-void DRL_BasedSmoothing0(MyMesh& mesh, int iternum);
 
 void angleBasedSmoothing(MyMesh &mesh, int iternum);
 void smartangleBasedSmoothing(MyMesh &mesh, int iternum);
