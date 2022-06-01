@@ -34,7 +34,7 @@ static double argInit_real_T()
 	return 0.0;
 }
 
-void DRL_BasedSmoothing(MyMesh& mesh, int iternum)
+void DRL_BasedSmoothing0(MyMesh& mesh, int iternum)
 {
 	for (int i = 0; i < iternum; i++)
 	{
@@ -85,9 +85,6 @@ void DRL_BasedSmoothing(MyMesh& mesh, int iternum)
 
 			for (int i = 0; i < oldpoints.size(); i++)
 			{
-				//oldpoints[i][0] = (oldpoints[i][0] - ringxmin) / len;
-				//oldpoints[i][1] = (oldpoints[i][1] - ringymin) / len;
-
 				oldpoints[i][0] = oldpoints[i][0] / len;
 				oldpoints[i][1] = oldpoints[i][1] / len;
 			}
@@ -122,21 +119,126 @@ void DRL_BasedSmoothing(MyMesh& mesh, int iternum)
 			vector<float> action(2);
 			evaluatePolicy(&observation[0], &action[0]);
 
+			if (fabs(action[0]) > 1e-5 || fabs(action[1]) > 1e-5)
+			{
+				int kkk = 1;
+				//cout << action[0] << "\t" << action[1] << endl;
+			}
+
 			Eigen::Vector2d vout(action[0], action[1]);
 
 			//映射回去
 			position[0] = (vout[0] + centroid[0]) * len;
 			position[1] = (vout[1] + centroid[1]) * len;
 
-			//position[0] = vout[0];
-			//position[1] = vout[1];
-			//position[0] = position[0] * len + ringxmin;
-			//position[1] = position[1] * len + ringymin;
+			mesh.set_point(*v_it, position);
+		}
+	}
+}
+
+void DRL_BasedSmoothing(MyMesh& mesh, int iternum)
+{
+	for (int i = 0; i < iternum; i++)
+	{
+		for (auto v_it = mesh.vertices_begin(); v_it != mesh.vertices_end(); v_it++)
+		{
+			MyMesh::Point cog;		//ring nodes的坐标累加
+			MyMesh::Scalar valence;	//ring nodes的数量
+			MyMesh::Point position;
+			vector<MyMesh::Point>  oldpoints;
+
+			if (mesh.is_boundary(*v_it))
+				continue;
+
+			position[2] = 0.0;
+			cog[0] = cog[1] = cog[2] = valence = 0.0;
+
+			//找出ring的所有点来
+			MyMesh::Scalar ringxmin = mesh.point(*v_it)[0];
+			MyMesh::Scalar ringxmax = mesh.point(*v_it)[0];
+			MyMesh::Scalar ringymin = mesh.point(*v_it)[1];
+			MyMesh::Scalar ringymax = mesh.point(*v_it)[1];
+			//for (auto vv_it = mesh.vv_ccwbegin(*v_it); vv_it != mesh.vv_ccwend(*v_it); ++vv_it)
+			//for (auto vv_it = mesh.vv_begin(*v_it); vv_it != mesh.vv_end(*v_it); ++vv_it)
+			for (auto vv_it = mesh.vv_cwbegin(*v_it); vv_it != mesh.vv_cwend(*v_it); ++vv_it)
+			{
+				oldpoints.push_back(mesh.point(*vv_it));
+				cog += mesh.point(*vv_it);	//ring nodes的坐标累加
+				++valence;					//ring nodes的数量
+
+				if (ringxmin > mesh.point(*vv_it)[0]) ringxmin = mesh.point(*vv_it)[0];
+				if (ringxmax < mesh.point(*vv_it)[0]) ringxmax = mesh.point(*vv_it)[0];
+				if (ringymin > mesh.point(*vv_it)[1]) ringymin = mesh.point(*vv_it)[1];
+				if (ringymax < mesh.point(*vv_it)[1]) ringymax = mesh.point(*vv_it)[1];
+			}
+
+			//ring nodes的数量大于10时，直接采用laplacian光滑
+			if (oldpoints.size() > 10)
+			{
+				cog = cog / valence;//形心 
+				mesh.set_point(*v_it, cog);
+				continue;
+			}
+
+			//归一化到0-1之间
+			MyMesh::Scalar len;
+			if (ringxmax - ringxmin > ringymax - ringymin)
+				len = ringxmax - ringxmin;
+			else
+				len = ringymax - ringymin;
+
+			MyMesh::Point center;
+			for (int i = 0; i < oldpoints.size(); i++)
+			{
+				oldpoints[i][0] = (oldpoints[i][0] - ringxmin) / len;
+				oldpoints[i][1] = (oldpoints[i][1] - ringymin) / len;
+
+				center[0] += oldpoints[i][0];
+				center[1] += oldpoints[i][1];
+			}
+			center[0] /= oldpoints.size();
+			center[1] /= oldpoints.size();
+
+			//将ring nodes加入observation数组
+			vector<double> observation(20);
+			for (int i = 0; i < oldpoints.size(); i++)
+			{
+				observation[i     ] = oldpoints[i][0];
+				observation[i + 10] = oldpoints[i][1];
+			}
+
+			//补齐10个ring nodes
+			for (int i = oldpoints.size(); i < 10; i++)
+			{
+				observation[i     ] = 0.0;
+				observation[i + 10] = 0.0;
+			}
+
+			//归一化的形心坐标
+			cog = cog / valence;
+			cog[0] = (cog[0] - ringxmin) / len;
+			cog[1] = (cog[1] - ringymin) / len;
+
+			//优化
+			vector<float> action(2);
+			evaluatePolicy(&observation[0], &action[0]);
+
+			if (action[0] > 0.0001 || action[1] > 0.0001)
+			{
+				int kkk = 1;
+			}
+
+			position[0] = action[0] + cog[0];
+			position[1] = action[1] + cog[1];
+
+			//映射回去
+			position[0] = position[0] * len + ringxmin;
+			position[1] = position[1] * len + ringymin;
 
 			mesh.set_point(*v_it, position);
 		}
 	}
-
+	evaluatePolicy_terminate();
 }
 
 void LaplacianBasedSmoothing(MyMesh& mesh, int iternum)
@@ -204,9 +306,9 @@ void angleBasedSmoothing(MyMesh &mesh, int iternum)
 
 				MyMesh::Point ptest = mesh.point(*v_it);
 
-				v.normalized();
-				v1.normalized();
-				v2.normalized();
+				v.normalize();
+				v1.normalize();
+				v2.normalize();
 				double beta = -(0.5*(acos(v1 | v) - acos(v2 | v)));
 
 				cog[0] += (mesh.point(*vvm_it)[0] + (mesh.point(*v_it)[0] - mesh.point(*vvm_it)[0])*cos(beta) - (mesh.point(*v_it)[1] - mesh.point(*vvm_it)[1])*sin(beta));
@@ -252,9 +354,9 @@ void smartangleBasedSmoothing(MyMesh &mesh, int iternum)
 
 				MyMesh::Point ptest = mesh.point(*v_it);
 
-				v.normalized();
-				v1.normalized();
-				v2.normalized();
+				v.normalize();
+				v1.normalize();
+				v2.normalize();
 				double beta = -(0.5*(acos(v1 | v) - acos(v2 | v)));
 
 				cog[0] += (mesh.point(*vvm_it)[0] + (mesh.point(*v_it)[0] - mesh.point(*vvm_it)[0])*cos(beta) - (mesh.point(*v_it)[1] - mesh.point(*vvm_it)[1])*sin(beta));

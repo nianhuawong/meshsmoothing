@@ -7,7 +7,7 @@
 
 std::vector<double> computesizelenQuality(MyMesh& mesh);
 
-
+std::vector<double> computeMeshAreaRatioQuality(MyMesh& mesh);
 std::vector<double> computeMeshIdealElementQuality(MyMesh& mesh);
 std::vector<double> computeMeshIdealElementQuality(MyTetMesh& mesh);
 

@@ -50,6 +50,31 @@ vector<double> computeMeshIdealElementQuality(MyMesh& mesh)
 	return qualities;
 }
 
+vector<double> computeMeshAreaRatioQuality(MyMesh& mesh)
+{
+	vector<double> qualities;
+	for (auto f_it = mesh.faces_begin(); f_it != mesh.faces_end(); f_it++)
+	{
+		auto fe_it = mesh.cfe_begin(*f_it);
+		
+		MyMesh::Edge e1;
+		MyMesh::Edge e2;
+		MyMesh::Edge e3;
+		
+		e1 = mesh.edge(*fe_it);
+		++fe_it;
+		e2 = mesh.edge(*fe_it);
+		++fe_it;
+		e3 = mesh.edge(*fe_it);
+
+		MyMesh::Face face1 = mesh.face(*f_it);
+		
+		int kkk = 1;
+		//qualities.push_back(quality);
+	}
+	return qualities;
+}
+
 vector<double> computeMeshIdealElementQuality(MyTetMesh& mesh)
 {
 	vector<double> qualities;
@@ -433,9 +458,12 @@ void outMeshIdealElementQuality(vector<double> &qualities1)
 			minangle = qualities1[i];
 		}
 	}
-	cout << "min_idel: " << minangle << " max_idel: " << maxangle << endl;
-	cout << num << " " << mean / num << endl; 
-	cout << num1 << " " << num2 << " " << num3 << " " << num4 << " " << num5 << " " << num6 << " " << num7 << " " << num8 << " " << num9 << " " << num10 << endl;
+
+	//cout << "num of q(cells): " << num << "\t max_idel: " << maxangle << endl;
+	cout << "min_idel: " << minangle << "\t mean quality: " << mean / num << endl;	
+	//cout << "0-1质量分9段统计：" << endl;
+	//cout << num1 << " " << num2 << " " << num3 << " " << num4 << " " << num5 << " " 
+	//	 << num6 << " " << num7 << " " << num8 << " " << num9 << " " << num10 << "\n" << endl;
 }
 void outMeshAngleQuality(vector<double> &qualities2)
 {
@@ -530,9 +558,31 @@ void outMeshAngleQuality(vector<double> &qualities2)
 		}
 	}
 	num = qualities2.size();
-	cout << "min_angle: " << minangle << " max_angle: " << maxangle << endl;
-	cout << num << " " << mean / num << endl; 
-	cout << num1 << " " << num2 << " " << num3 << " " << num4 << " " << num5 << " " << num6 << " " << num7 << " " << num8 << " " << num9 << " " << num10 << " " << num11 << " " << num12 << " " << num13 << " " << num14 << " " << num15 << " " << num16 << " " << num17 << " " << num18 << endl;
+
+	vector<double> minAngleTriangle(num / 3);
+	for (int i = 0; i < num / 3; i++)
+	{
+		double tmp1 = qualities2[i * 3];
+		double tmp2 = qualities2[i * 3 +1];
+		double tmp3 = qualities2[i * 3 +2];
+
+		minAngleTriangle[i] = min(min(tmp1, tmp2),tmp3);
+	}
+	
+	double summin = 0;
+	for (int i = 0; i < num / 3; i++)
+	{
+		summin += minAngleTriangle[i];
+	}
+	//cout << "num of angles: " << num  << "\t max_angle: " << maxangle << endl;
+	cout << "min_angle: " << minangle << "\t mean min angle: " << summin * 3.0 / num << endl;	
+	//cout << "0-180°分17段统计：" << endl;
+	//cout << num1  << " " << num2  << " " << num3  << " " << num4  << " " 
+	//	 << num5  << " " << num6  << " " << num7  << " " << num8  << " " 
+	//	 << num9  << " " << num10 << " " << num11 << " " << num12 << " " 
+	//	 << num13 << " " << num14 << " " << num15 << " " << num16 << " " 
+	//	 << num17 << " " << num18 << endl;
+	cout << endl;
 }
 void outFileMeshAngleQuality(string fname, vector<double> &qualities2)
 {

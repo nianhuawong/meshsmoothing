@@ -5,9 +5,9 @@ project(meshimprove)
 #set(CMAKE_BUILD_TYPE Release)
 
 if(DEFINED CMAKE_BUILD_TYPE)
-	set(CMAKE_BUILD_TYPE ${CMAKE_BUILD_TYPE} CACHE STRING "Set CMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}")
+	set(CMAKE_BUILD_TYPE ${CMAKE_BUILD_TYPE} CACHE STRING "Set CMAKE_BUILD_TYPE")
 else() 
-	set(CMAKE_BUILD_TYPE Debug CACHE STRING "Set CMAKE_BUILD_TYPE=Debug")
+	set(CMAKE_BUILD_TYPE Debug CACHE STRING "Set CMAKE_BUILD_TYPE")
 endif()
 message(STATUS "CMAKE_BUILD_TYPE = " ${CMAKE_BUILD_TYPE})
 
@@ -126,6 +126,7 @@ ${INC_DIR}/smoothing.h
 ${INC_DIR}/writefile.h
 ${INC_DIR}/dataType.h
 )
+source_group(MeshImprove\\include FILES ${HEADER})
 
 set(SRC 
 ${SRC_DIR}/equation.cpp
@@ -136,9 +137,10 @@ ${SRC_DIR}/OpenNL_psm.c
 ${SRC_DIR}/smoothing.cpp
 ${SRC_DIR}/writefile.cpp
 )
+source_group(MeshImprove\\src FILES ${SRC})
 
-set(DRL_DIR ./DRL)
-set(SRC ${SRC} 
+set(DRL_DIR ./DRL/src)
+set(DRL_SRC 
 ${DRL_DIR}/cnn_api.cpp
 ${DRL_DIR}/DeepLearningNetwork.cpp
 ${DRL_DIR}/evaluatePolicy.cpp
@@ -148,11 +150,16 @@ ${DRL_DIR}/evaluatePolicy_rtwutil.cpp
 ${DRL_DIR}/evaluatePolicy_terminate.cpp
 ${DRL_DIR}/MWCNNLayerImpl.cpp
 ${DRL_DIR}/MWMkldnnUtils.cpp
-${DRL_DIR}/MWTanhLayer.cpp
-${DRL_DIR}/MWTanhLayerImpl.cpp
+#${DRL_DIR}/MWTanhLayer.cpp
+#${DRL_DIR}/MWTanhLayerImpl.cpp
 ${DRL_DIR}/MWTargetNetworkImpl.cpp
 ${DRL_DIR}/predict.cpp
 )
+source_group(EvaluatePolicy\\src FILES ${DRL_SRC})
+
+set(CPP_LIST ${SRC} ${DRL_SRC})
+set(HEADER_LIST ${HEADER} ${DRL_HEADER})
+
 
 include_directories(./inc)
 include_directories(./lib/Eigen3.4)
@@ -167,10 +174,10 @@ include_directories(C:/software/oneDNN/include/)
 link_directories(C:/software/oneDNN/bin/)
 link_directories(C:/software/oneDNN/lib/)
 
-include_directories(D:/Codes/Mesh_Generation/meshimprove_VS2019/DRL/)
-link_directories(D:/Codes/Mesh_Generation/meshimprove_VS2019/DRL/)
+include_directories(D:/Codes/Mesh_Generation/meshimprove_VS2019/DRL/src)
 
-add_executable(${TARGET_NAME} ${SRC} ${HEADER})
+add_executable(${TARGET_NAME} ${CPP_LIST} ${HEADER_LIST})
+
 if(CMAKE_BUILD_TYPE STREQUAL Debug)
 target_link_libraries(${TARGET_NAME} OpenMeshCored OpenMeshToolsd OpenVolumeMeshd mkldnn)
 else()
