@@ -121,7 +121,7 @@ void readQuadVTK(PolyMesh &mesh, char* filename)
 	cout << mesh.n_faces() << endl;
 }
 
-void readTriVTK(MyMesh &mesh, char* filename)
+void readTriVTK(MyMesh &mesh, const char* filename)
 {
 	vector<MyMesh::VertexHandle> vhs;
 	string filena(filename);
@@ -304,4 +304,13 @@ bool readTetVTK(MyTetMesh &mesh, string fname){
 	}
 	fin.close();
 	return true;
+}
+
+void GetFileNameExtension(const string& fullName, string& mainName, string& extensionName, const string& fileNameSeparator)
+{
+	basic_string <char>::size_type index;
+
+	index = fullName.find_last_of(fileNameSeparator);
+	mainName = fullName.substr(0, index);
+	extensionName = fullName.substr(index + 1, fullName.length() - index - 1);
 }

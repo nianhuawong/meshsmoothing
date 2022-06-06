@@ -10,6 +10,38 @@
 using namespace std;
 using namespace Eigen;
 
+smooth_func_ptr get_smooth_func(int method)
+{
+	switch (method)
+	{
+	case LAPLACIAN:
+		return &LaplacianBasedSmoothing;
+		break;
+	case ANGLE_BASED:
+		return &angleBasedSmoothing;
+		break;
+	case GETME:
+		return &GetMe;
+		break;
+	case NN_BASED:
+		readopt3("../opt/opt3.txt");
+		readopt4("../opt/opt4.txt");
+		readopt5("../opt/opt5.txt");
+		readopt6("../opt/opt6.txt");
+		readopt7("../opt/opt7.txt");
+		readopt8("../opt/opt8.txt");
+		readopt9("../opt/opt9.txt");
+
+		return &NNSmoothing;
+		break;
+	case DRL_BASED:
+		return &DRL_BasedSmoothing;
+		break;
+	default:
+		break;
+	}
+}
+
 static void argInit_10x2_real_T(double result[20]);
 static double argInit_real_T();
 static void argInit_10x2_real_T(double result[20])

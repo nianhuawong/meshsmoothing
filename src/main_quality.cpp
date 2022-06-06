@@ -10,24 +10,30 @@
 using namespace std;
 void main()
 {
-	MyMesh mesh;
-	bool result0 = OpenMesh::IO::read_mesh(mesh, "sresult3.stl");
-	double aveang = computeMeshAveang(mesh);
-	cout << aveang << endl;
-	MyMesh mesh2;
-	bool result2 = OpenMesh::IO::read_mesh(mesh2, "angsresult3.stl");
-	double aveang2 = computeMeshAveang(mesh2);
-	cout << aveang2 << endl;
-	MyMesh mesh3;
-	bool result3 = OpenMesh::IO::read_mesh(mesh3, "getsresult3.stl");
-	double aveang3 = computeMeshAveang(mesh3);
-	cout << aveang3 << endl;
-	MyMesh mesh4;
-	bool result4 = OpenMesh::IO::read_mesh(mesh4, "optsresult3.stl");
-	double aveang4 = computeMeshAveang(mesh4);
-	cout << aveang4 << endl;
-	MyMesh mesh5;
-	bool result5 = OpenMesh::IO::read_mesh(mesh5, "myoptsresult3.stl");
-	double aveang5 = computeMeshAveang(mesh5);
-	cout << aveang5 << endl;
+	string filename = "../example/1/first_opt_smoothed.vtk";		//1
+
+	char out_file[256];
+	string mainName, extensionName;
+	GetFileNameExtension(filename, mainName, extensionName, ".");
+
+	MyMesh mymesh;
+	if (extensionName == "stl")
+	{
+		OpenMesh::IO::read_mesh(mymesh, filename);
+	}
+	else if (extensionName == "vtk")
+	{
+		readTriVTK(mymesh, filename.c_str());
+	}
+
+	vector<double> qualities1 = computeMeshAngleQuality(mymesh);
+	vector<double> qualities2 = computeMeshIdealElementQuality(mymesh);
+	double minAngle = computeMeshAveang(mymesh);
+	//vector<double> qualities23 = computeMeshAreaRatioQuality(mymesh);
+
+	cout << "==========================" << endl;
+	cout << "网格质量检查......";
+	outMeshAngleQuality(qualities1);
+	outMeshIdealElementQuality(qualities2);	
+	cout << endl;
 }

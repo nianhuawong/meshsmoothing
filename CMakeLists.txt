@@ -12,7 +12,7 @@ endif()
 message(STATUS "CMAKE_BUILD_TYPE = " ${CMAKE_BUILD_TYPE})
 
 set(CMAKE_CXX_STANDARD 14)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W0")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W0 -DOM_STATIC_BUILD")
 
 #=======================================
 set(INC_DIR ./inc)
@@ -138,7 +138,8 @@ endif()
 #quality
 set(TARGET_NAME Quality)
 set(SRC5 
-${SRC_DIR}/main_quality.cpp 
+${SRC_DIR}/main_quality.cpp
+${SRC_DIR}/writefile.cpp 
 ${SRC_DIR}/meshquality.cpp
 )
 add_executable(${TARGET_NAME} ${SRC5} ${COMMON_HEADER})

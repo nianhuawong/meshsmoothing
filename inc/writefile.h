@@ -20,7 +20,7 @@ void writeQuadVTK(PolyMesh &mesh, char* filename);
 
 
 //输入三角形网格
-void readTriVTK(MyMesh &mesh, char* filename);
+void readTriVTK(MyMesh &mesh, const char* filename);
 
 //输出三角形网格
 void writeTriVTK(MyMesh& mesh, char* filename);
@@ -29,5 +29,7 @@ void writeTriVTK(MyMesh& mesh, char* filename);
 void readTritxt(MyMesh &mesh, char* filename1, char* filename2);
 
 void readliu(MyMesh &mesh, char* filename);
+
+void GetFileNameExtension(const std::string& fullName, std::string& mainName, std::string& extensionName, const std::string& fileNameSeparator);
 
 #endif

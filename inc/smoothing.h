@@ -5,6 +5,19 @@
 #include "dataType.h"
 #include <Dense>
 
+enum SMOOTH_METHOD
+{
+	LAPLACIAN = 1,
+	ANGLE_BASED = 2,
+	GETME = 3,
+	NN_BASED = 4,
+	DRL_BASED = 5
+};
+
+typedef void (*smooth_func_ptr)(MyMesh& mesh, int iter);
+
+smooth_func_ptr get_smooth_func(int method);
+
 void DRL_BasedSmoothing(MyMesh& mesh, int iternum);
 
 void angleBasedSmoothing(MyMesh &mesh, int iternum);
