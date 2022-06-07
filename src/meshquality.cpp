@@ -465,6 +465,7 @@ void outMeshIdealElementQuality(vector<double> &qualities1)
 	//cout << num1 << " " << num2 << " " << num3 << " " << num4 << " " << num5 << " " 
 	//	 << num6 << " " << num7 << " " << num8 << " " << num9 << " " << num10 << "\n" << endl;
 }
+
 void outMeshAngleQuality(vector<double> &qualities2)
 {
 	int num1, num2, num3, num4, num5, num6, num7, num8, num9, num10, num11, num12, num13, num14, num15, num16, num17, num18;
@@ -584,34 +585,14 @@ void outMeshAngleQuality(vector<double> &qualities2)
 	//	 << num17 << " " << num18 << endl;
 	cout << endl;
 }
+
 void outFileMeshAngleQuality(string fname, vector<double> &qualities2)
 {
-	fname.append(".txt");
-	int num1, num2, num3, num4;
-	num1 = num2 = num3 = num4 = 0;
-	double mean = 0.;
 	double maxangle = 0.;
 	double minangle = 180.;
-	int num = qualities2.size();
+	int num = qualities2.size() / 3;
 	for (int i = 0; i < qualities2.size(); i++)
 	{
-		if (qualities2[i] <= 10.)
-		{
-			num1++;
-		}
-		else if (qualities2[i] <= 20.)
-		{
-			num2++;
-		}
-		else if (qualities2[i] >= 165.)
-		{
-			num3++;
-		}
-		else if (qualities2[i] >= 150.)
-		{
-			num4++;
-		}
-		mean += qualities2[i];
 		if (qualities2[i] > maxangle)
 		{
 			maxangle = qualities2[i];
@@ -621,9 +602,64 @@ void outFileMeshAngleQuality(string fname, vector<double> &qualities2)
 			minangle = qualities2[i];
 		}
 	}
+
+	vector<double> minAngleTriangle(num);
+	for (int i = 0; i < num; i++)
+	{
+		double tmp1 = qualities2[i * 3];
+		double tmp2 = qualities2[i * 3 + 1];
+		double tmp3 = qualities2[i * 3 + 2];
+
+		minAngleTriangle[i] = min(min(tmp1, tmp2), tmp3);
+	}
+
+	double mean = 0;
+	for (int i = 0; i < num; i++)
+	{
+		mean += minAngleTriangle[i];
+	}
+	mean /= num;
+
+	cout << "angle quality写入文件..." << endl;
 	ofstream fout;
 	fout.open(fname,ios::app); 
 	num = qualities2.size();
-	fout << minangle << " " << maxangle << endl;
-	//cout << num << " " << num1 << " " << num2 << " " << num3 << " " << num4 << " " << mean / num << endl;
+	fout << minangle << " " << mean << " ";
+	fout.close();
+	cout << "angle quality写入文件...Done!" << endl;
+	//fout << minangle << " " << maxangle << endl;
+}
+
+void outFileMeshIdealElementQuality(string fname, vector<double>& qualities1)
+{
+	double mean = 0.;
+	double maxquality = 0.;
+	double minquality = 1.;
+	int num = qualities1.size();
+
+	for (int i = 0; i < qualities1.size(); i++)
+	{
+		mean += qualities1[i];
+
+		if (qualities1[i] > maxquality)
+		{
+			maxquality = qualities1[i];
+		}
+		if (qualities1[i] < minquality)
+		{
+			minquality = qualities1[i];
+		}
+	}
+
+	mean /= num;
+
+	cout << "quality写入文件..." << endl;
+
+	ofstream fout;
+	fout.open(fname, ios::app);
+	num = qualities1.size();
+	fout << minquality << " " << mean << endl;
+	fout.close();
+
+	cout << "quality写入文件...Done!" << endl;
 }

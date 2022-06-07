@@ -7,11 +7,13 @@
 
 enum SMOOTH_METHOD
 {
+	NEGPROVE = 0,
 	LAPLACIAN = 1,
 	ANGLE_BASED = 2,
 	GETME = 3,
 	NN_BASED = 4,
-	DRL_BASED = 5
+	DRL_BASED = 5,
+	OPTIMIZATION = 6
 };
 
 typedef void (*smooth_func_ptr)(MyMesh& mesh, int iter);
@@ -24,6 +26,8 @@ void angleBasedSmoothing(MyMesh &mesh, int iternum);
 void smartangleBasedSmoothing(MyMesh &mesh, int iternum);
 
 void LaplacianBasedSmoothing(MyMesh& mesh, int iternum);
+
+void OptimizationBasedSmoothing(MyMesh& mesh, int iternum);
 
 void GetMe(MyMesh &mesh, int iternum);
 

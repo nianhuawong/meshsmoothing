@@ -14,6 +14,9 @@ smooth_func_ptr get_smooth_func(int method)
 {
 	switch (method)
 	{
+	case NEGPROVE:
+		return &negprove;
+		break;
 	case LAPLACIAN:
 		return &LaplacianBasedSmoothing;
 		break;
@@ -169,6 +172,11 @@ void DRL_BasedSmoothing(MyMesh& mesh, int iternum)
 		}
 	}
 	evaluatePolicy_terminate();
+}
+
+void OptimizationBasedSmoothing(MyMesh& mesh, int iternum)
+{
+	//writeVTKWithFixedBoundery(mesh, "optimize_tmp_mesh.vtk");
 }
 
 void LaplacianBasedSmoothing(MyMesh& mesh, int iternum)
